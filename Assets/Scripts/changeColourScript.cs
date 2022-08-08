@@ -1,32 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class changeColourScript : MonoBehaviour
 {
     public Material[] materials; //array of materials
-    public Renderer rendCube; //renderer
-    public Renderer rendSphere; //renderer
-    public Renderer rendCylinder; //renderer
+    //create a renderer for objects with the tag "spawneditem"
+    public Renderer rendSpawnedItem;
 
-    private int index = 1;
+    private int index = 1; //index of the material array
 
-    public void buttonPressed(){
-        if (materials.Length == 0)
-        return;
+    Toggle toggle;
+    //
 
-        index += 1;  //increment the index
-
-        if (index == materials.Length + 1)
-        index = 1; //reset the index
-
-        print(index); //print the index
-
-        rendCube.sharedMaterial = materials[index-1]; //set the renderer's material to the material at the index
-        rendSphere.sharedMaterial = materials[index-1]; //set the renderer's material to the material at the index
-        rendCylinder.sharedMaterial = materials[index-1]; //set the renderer's material to the material at the index
+    void Update(){
+        toggle = GameObject.Find("colourToggle").GetComponent<Toggle>();
+        toggle = toggle.GetComponent<Toggle>(); //get the toggle component
+     //if the object is clicked, change the colour
+        if(Input.GetMouseButtonDown(0) && toggle.isOn){
+            RaycastHit hit; //create a raycast hit
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //create a ray from the mouse position
+            if (Physics.Raycast(ray, out hit)){
+                //if the hit object has spawnedItem tag
+                if (hit.transform.tag == "spawneditem") {
+                    rendSpawnedItem = hit.transform.GetComponent<Renderer>(); //get the renderer component
+                    rendSpawnedItem.material = materials[index]; //change the material
+                    index++; //increment the index
+                    if (index == materials.Length) { //if the index is equal to the length of the array
+                        index = 0; //set the index to 0
+                    }
+                }
+            }
+        }   
     }
-
-    
     
 }

@@ -9,16 +9,26 @@ public class deleteScript : MonoBehaviour
 
     //if the toggle is on, delete the cube
     public void Update() {
-        toggle = GameObject.Find("deleteToggle").GetComponent<Toggle>();
-        toggle = GetComponent<Toggle>();
+        toggle = GameObject.Find("deleteToggle").GetComponent<Toggle>(); //get the toggle
+        toggle = GetComponent<Toggle>(); //get the toggle component
+        // spawneditem = GameObject.Find("defaultCube"); //get the spawned cube
+        //if an item has been clicked and the toggle is on, delete the item
+        // if (toggle.isOn) {
+        //     //if an item has been clicked
+        //     if (spawneditem != null) {
+        //         //delete the item
+        //         Destroy(spawneditem);
+        //     }
+        // }
+
         if (Input.GetMouseButtonDown(0) && toggle.isOn) {
             print("delete");
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit; //create a raycast hit 
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //create a ray from the mouse position
             if (Physics.Raycast(ray, out hit)){
-              BoxCollider bc = hit.collider as BoxCollider;
-                if (bc != null){
-                    Destroy(bc.gameObject);
+                //if the hit object has spawnedItem tag
+                if (hit.transform.tag == "spawneditem") {
+                    Destroy(hit.transform.gameObject);
                 }
             }
         }
